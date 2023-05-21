@@ -1,20 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import axios from 'axios';
+import React, { useState } from 'react';
+import {View, Text, Button} from 'react-native';
 
-export default function App() {
+
+const App = () => {
+  const [happys, setHappys] = useState ([])
+  const getHappys = async () => {
+    try {
+      const result = await axios.get("https://api.themoviedb.org/3/person/popular?api_key=8597e491ed6e80f0de12e349eb60ea6e&language=en-US&page=1")
+      console.log(result.data.results)
+      setHappys(result.data.results)
+      
+    } catch (error) {
+      
+    }
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      {happys && happys.map(happy => (
+        <Text>
+          {happy.id}
+        </Text>
+      ))}
+      <Button title="데이터 가져오기" onPress={getHappys} />
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  
+};
+export default App;
